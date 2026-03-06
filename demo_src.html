@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clippy.js Source Demo</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <link rel="stylesheet" href="src/clippy.css">
+    <style>
+        body {
+            background-color: #008080;
+            padding: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .window {
+            width: 600px;
+        }
+
+        .window-body {
+            padding: 10px;
+        }
+
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .field-row-stacked {
+            margin-bottom: 15px;
+        }
+
+        pre {
+            background: #fff;
+            padding: 10px;
+            border: 1px inset #d2d2d2;
+            overflow-x: auto;
+            margin: 0;
+        }
+
+        code {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 12px;
+        }
+
+        .status-bar {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="title-bar">
+            <div class="title-bar-text">Clippy.js Demo - Modular Source Version</div>
+            <div class="title-bar-controls">
+                <button aria-label="Minimize"></button>
+                <button aria-label="Maximize"></button>
+                <button aria-label="Close"></button>
+            </div>
+        </div>
+        <div class="window-body">
+            <p>This demo uses the <b>modular source files</b> from the <code>src/</code> directory directly.</p>
+
+            <fieldset>
+                <legend>Assistant Settings</legend>
+                <div class="field-row">
+                    <label for="agentSelect">Agent:</label>
+                    <select id="agentSelect">
+                        <option value="Clippy" selected>Clippy</option>
+                        <option value="Bonzi">Bonzi</option>
+                        <option value="Genie">Genie</option>
+                        <option value="Genius">Genius</option>
+                        <option value="Links">Links</option>
+                        <option value="Merlin">Merlin</option>
+                        <option value="Peedy">Peedy</option>
+                        <option value="Rocky">Rocky</option>
+                        <option value="Rover">Rover</option>
+                        <option value="F1">F1</option>
+                    </select>
+                </div>
+                <div class="field-row">
+                    <input type="checkbox" id="ttsCheckbox">
+                    <label for="ttsCheckbox">Enable Text-to-Speech (TTS)</label>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Actions</legend>
+                <div class="controls">
+                    <button onclick="speak()">Speak Randomly</button>
+                    <button onclick="ask()">Ask Question</button>
+                    <button onclick="animateRandomly()">Play Animation</button>
+                    <button onclick="moveToRandom()">Move to Random Pos</button>
+                    <button onclick="changePersonality()">Change Personality</button>
+                    <button onclick="currentAgent.animate()">Random Animation</button>
+                </div>
+            </fieldset>
+
+            <fieldset style="margin-top: 15px;">
+                <legend>Source Files Loaded</legend>
+                <div class="field-row-stacked">
+                    <ul>
+                        <li>src/agent.js</li>
+                        <li>src/animator.js</li>
+                        <li>src/balloon.js</li>
+                        <li>src/load.js</li>
+                        <li>src/queue.js</li>
+                        <li>src/extensions.js</li>
+                    </ul>
+                </div>
+            </fieldset>
+
+            <div class="status-bar">
+                <p class="status-bar-field">Status: <span id="status">Ready</span></p>
+                <p class="status-bar-field">Personality: <span id="personality">Default</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dependencies -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Modular Source Files -->
+    <script src="src/agent.js"></script>
+    <script src="src/animator.js"></script>
+    <script src="src/balloon.js"></script>
+    <script src="src/load.js"></script>
+    <script src="src/queue.js"></script>
+    <script src="src/extensions.js"></script>
+
+    <script>
+        var currentAgent = null;
+        var personalities = ['helpful', 'playful', 'professional', 'sarcastic'];
+        var currentPIdx = 0;
+
+        function setStatus(text) {
+            document.getElementById('status').innerText = text;
+        }
+
+        function loadAgent(name) {
+            setStatus('Loading ' + name + '...');
+
+            if (currentAgent) {
+                currentAgent.hide(true, function() {
+                    $('.clippy, .clippy-balloon').remove();
+                });
+            }
+
+            clippy.load(name, function(agent) {
+                currentAgent = agent;
+                agent.show();
+                agent.setRecommendedVoice();
+
+                var ttsEnabled = document.getElementById('ttsCheckbox').checked;
+                agent.setTTSEnabled(ttsEnabled);
+
+                setStatus(name + ' Ready');
+                agent.speak('Source assistant ' + name + ' is ready!');
+            });
+        }
+
+        function speak() {
+            if (!currentAgent) return;
+            currentAgent.speak("I am running directly from the modular source files.");
+        }
+
+        function ask() {
+            if (!currentAgent) return;
+            currentAgent.ask({
+                title: "Source Demo",
+                onAsk: function(val) {
+                    if (val) {
+                        currentAgent.speak("You typed: " + val);
+                    }
+                }
+            });
+        }
+
+        function animateRandomly() {
+            if (!currentAgent) return;
+            currentAgent.animate();
+        }
+
+        function moveToRandom() {
+            if (!currentAgent) return;
+            var x = Math.random() * (window.innerWidth - 200);
+            var y = Math.random() * (window.innerHeight - 200);
+            currentAgent.moveTo(x, y);
+        }
+
+        function changePersonality() {
+            if (!currentAgent) return;
+            currentPIdx = (currentPIdx + 1) % personalities.length;
+            var p = personalities[currentPIdx];
+            currentAgent.setPersonality(p);
+            document.getElementById('personality').innerText = p.charAt(0).toUpperCase() + p.slice(1);
+            currentAgent.greetWithPersonality();
+        }
+
+        document.getElementById('agentSelect').addEventListener('change', function(e) {
+            loadAgent(e.target.value);
+        });
+
+        document.getElementById('ttsCheckbox').addEventListener('change', function(e) {
+            if (currentAgent) currentAgent.setTTSEnabled(e.target.checked);
+        });
+
+        $(document).ready(function() {
+            clippy.BASE_PATH = 'agents/';
+            loadAgent('Clippy');
+        });
+    </script>
+</body>
+</html>

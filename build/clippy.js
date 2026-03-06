@@ -558,7 +558,7 @@ clippy.Agent.prototype = {
   },
 
   _updateLocation: function () {
-    this._el.css({ top: this._targetY, left: this._taregtX });
+    this._el.css({ top: this._targetY, left: this._targetX });
     this._dragUpdateLoop = window.setTimeout(
       $.proxy(this._updateLocation, this),
       10
@@ -570,7 +570,7 @@ clippy.Agent.prototype = {
     const coords = this._getEventCoords(e);
     var x = coords.clientX - this._offset.left;
     var y = coords.clientY - this._offset.top;
-    this._taregtX = x;
+    this._targetX = x;
     this._targetY = y;
   },
 
