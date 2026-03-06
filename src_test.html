@@ -1,0 +1,24 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="src/clippy.css">
+</head>
+<body>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="src/agent.js"></script>
+    <script src="src/animator.js"></script>
+    <script src="src/balloon.js"></script>
+    <script src="src/load.js"></script>
+    <script src="src/queue.js"></script>
+    <script src="src/extensions.js"></script>
+    <script>
+        clippy.BASE_PATH = 'agents/';
+        clippy.load('Clippy', function(agent) {
+            window.agent = agent;
+            agent.show();
+            agent.speak('Hello from synchronized SRC!');
+        });
+    </script>
+</body>
+</html>
