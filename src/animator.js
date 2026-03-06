@@ -1,3 +1,6 @@
+import $ from "jquery";
+import clippy from "./core.js";
+
 /******
  *
  *

@@ -1,4 +1,7 @@
-clippy.BASE_PATH = "clippy/agents/";
+import $ from "jquery";
+import clippy from "./core.js";
+
+clippy.BASE_PATH = "https://unpkg.com/clippy-js-enhanced@1.0.0/agents/";
 
 clippy.load = function (name, successCb, failCb) {
   var path = clippy.BASE_PATH + name;
