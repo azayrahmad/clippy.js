@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clippy.js Source Demo</title>
     <link rel="stylesheet" href="https://unpkg.com/98.css">
-    <link rel="stylesheet" href="src/clippy.css">
     <style>
         body {
             background-color: #008080;
@@ -65,7 +64,7 @@
             </div>
         </div>
         <div class="window-body">
-            <p>This demo uses the <b>modular source files</b> from the <code>src/</code> directory directly.</p>
+            <p>This demo uses the <b>modular source files</b> via ES Modules.</p>
 
             <fieldset>
                 <legend>Assistant Settings</legend>
@@ -93,12 +92,12 @@
             <fieldset>
                 <legend>Actions</legend>
                 <div class="controls">
-                    <button onclick="speak()">Speak Randomly</button>
-                    <button onclick="ask()">Ask Question</button>
-                    <button onclick="animateRandomly()">Play Animation</button>
-                    <button onclick="moveToRandom()">Move to Random Pos</button>
-                    <button onclick="changePersonality()">Change Personality</button>
-                    <button onclick="currentAgent.animate()">Random Animation</button>
+                    <button id="speakBtn">Speak Randomly</button>
+                    <button id="askBtn">Ask Question</button>
+                    <button id="animateBtn">Play Animation</button>
+                    <button id="moveBtn">Move to Random Pos</button>
+                    <button id="personalityBtn">Change Personality</button>
+                    <button id="randomAnimBtn">Random Animation</button>
                 </div>
             </fieldset>
 
@@ -106,12 +105,7 @@
                 <legend>Source Files Loaded</legend>
                 <div class="field-row-stacked">
                     <ul>
-                        <li>src/agent.js</li>
-                        <li>src/animator.js</li>
-                        <li>src/balloon.js</li>
-                        <li>src/load.js</li>
-                        <li>src/queue.js</li>
-                        <li>src/extensions.js</li>
+                        <li>src/index.js (Entry Point)</li>
                     </ul>
                 </div>
             </fieldset>
@@ -126,15 +120,12 @@
     <!-- Dependencies -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- Modular Source Files -->
-    <script src="src/agent.js"></script>
-    <script src="src/animator.js"></script>
-    <script src="src/balloon.js"></script>
-    <script src="src/load.js"></script>
-    <script src="src/queue.js"></script>
-    <script src="src/extensions.js"></script>
+    <script type="module">
+        import { clippy } from './src/index.js';
+        import $ from 'jquery';
 
-    <script>
+        window.clippy = clippy;
+
         var currentAgent = null;
         var personalities = ['helpful', 'playful', 'professional', 'sarcastic'];
         var currentPIdx = 0;
@@ -165,12 +156,12 @@
             });
         }
 
-        function speak() {
+        document.getElementById('speakBtn').onclick = function() {
             if (!currentAgent) return;
-            currentAgent.speak("I am running directly from the modular source files.");
-        }
+            currentAgent.speak("I am running directly from the modular source files via ES modules.");
+        };
 
-        function ask() {
+        document.getElementById('askBtn').onclick = function() {
             if (!currentAgent) return;
             currentAgent.ask({
                 title: "Source Demo",
@@ -180,28 +171,32 @@
                     }
                 }
             });
-        }
+        };
 
-        function animateRandomly() {
+        document.getElementById('animateBtn').onclick = function() {
             if (!currentAgent) return;
             currentAgent.animate();
-        }
+        };
 
-        function moveToRandom() {
+        document.getElementById('moveBtn').onclick = function() {
             if (!currentAgent) return;
             var x = Math.random() * (window.innerWidth - 200);
             var y = Math.random() * (window.innerHeight - 200);
             currentAgent.moveTo(x, y);
-        }
+        };
 
-        function changePersonality() {
+        document.getElementById('personalityBtn').onclick = function() {
             if (!currentAgent) return;
             currentPIdx = (currentPIdx + 1) % personalities.length;
             var p = personalities[currentPIdx];
             currentAgent.setPersonality(p);
             document.getElementById('personality').innerText = p.charAt(0).toUpperCase() + p.slice(1);
             currentAgent.greetWithPersonality();
-        }
+        };
+
+        document.getElementById('randomAnimBtn').onclick = function() {
+            if (currentAgent) currentAgent.animate();
+        };
 
         document.getElementById('agentSelect').addEventListener('change', function(e) {
             loadAgent(e.target.value);
