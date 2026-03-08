@@ -1,20 +1,13 @@
+import $ from "jquery";
+import clippy from "./core.js";
+
 /**
  * Clippy.js Extensions - Complete Implementation
  * Method 1: Prototype Extension
- *
- * Load this file AFTER clippy.js to extend all agent instances
- * Usage: <script src="clippy.js"></script>
- *        <script src="clippy-extensions.js"></script>
  */
 
 (function () {
     'use strict';
-
-    // Ensure clippy exists
-    if (typeof clippy === 'undefined') {
-        console.error('Clippy.js Extensions: clippy.js must be loaded first!');
-        return;
-    }
 
     // =============================================================================
     // CORE ENHANCED METHODS
@@ -59,7 +52,7 @@
         }, this);
 
         return true;
-    },
+    };
 
         /**
          * Speak text while simultaneously playing an animation (with optional TTS)
@@ -1063,6 +1056,5 @@
 
     // Log successful loading
     console.log('Clippy.js Extensions v' + clippy.extensions.version + ' loaded successfully!');
-    console.log('Available methods:', clippy.extensions.methods);
 
 })();

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clippy.js NPM Library Test</title>
+    <link rel="stylesheet" href="https://unpkg.com/98.css">
+    <style>
+        body {
+            background-color: #008080;
+            padding: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .window {
+            width: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div class="window">
+        <div class="title-bar">
+            <div class="title-bar-text">Clippy NPM Test</div>
+        </div>
+        <div class="window-body">
+            <p>If you see Clippy, the NPM module is working correctly!</p>
+            <p>Run <code>npm run dev</code> to start this test server.</p>
+            <button id="speakBtn">Make him speak</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { clippy } from './src/index.js';
+
+        // Use local agents for testing
+        clippy.BASE_PATH = './agents/';
+
+        clippy.load('Clippy', (agent) => {
+            agent.show();
+            agent.speak('Hello! I am running as an ES module via Vite.');
+
+            document.getElementById('speakBtn').onclick = () => {
+                agent.speak('Testing 1, 2, 3...');
+            };
+        });
+    </script>
+</body>
+</html>

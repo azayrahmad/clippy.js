@@ -1,0 +1,38 @@
+{
+  "name": "clippy-js-enhanced",
+  "version": "1.0.0",
+  "description": "Enhanced Clippy.JS with TTS, mobile support, and interactive balloons.",
+  "main": "./dist/clippy-js-enhanced.umd.cjs",
+  "module": "./dist/clippy-js-enhanced.js",
+  "exports": {
+    ".": {
+      "import": "./dist/clippy-js-enhanced.js",
+      "require": "./dist/clippy-js-enhanced.umd.cjs"
+    }
+  },
+  "files": [
+    "dist",
+    "agents"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "clippy",
+    "microsoft",
+    "agent",
+    "assistant",
+    "nostalgia"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "^3.6.0"
+  },
+  "devDependencies": {
+    "vite": "^4.0.0",
+    "vite-plugin-css-injected-by-js": "^3.0.0"
+  }
+}

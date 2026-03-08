@@ -1,3 +1,5 @@
+import $ from "jquery";
+import clippy from "./core.js";
 
 /******
  *
@@ -482,4 +484,3 @@ clippy.Balloon.prototype = {
     window.speechSynthesis.speak(utterance);
   },
 };
-
